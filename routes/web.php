@@ -58,12 +58,18 @@ Route::group(['namespace' => 'App\Http\Controllers'], function () {
         // Items - Formulário em página separada (evita problemas de modal)
         Route::get('/{editionId}/items/create', [\App\Http\Controllers\Admin\StudyClubAdminController::class, 'createItem'])->name('admin.studyclub.items.create');
         Route::post('/{editionId}/items', [\App\Http\Controllers\Admin\StudyClubAdminController::class, 'storeItem'])->name('admin.studyclub.items.store');
+        Route::put('/items/{itemId}', [\App\Http\Controllers\Admin\StudyClubAdminController::class, 'updateItem'])->name('admin.studyclub.items.update');
         Route::delete('/items/{itemId}', [\App\Http\Controllers\Admin\StudyClubAdminController::class, 'destroyItem'])->name('admin.studyclub.items.destroy');
         
         // Checkout Admin (Bypass de Pagamento)
         Route::get('/checkout/{planId1?}/{planId2?}', [\App\Http\Controllers\Admin\StudyClubAdminCheckoutController::class, 'show'])->name('admin.studyclub.checkout');
         Route::post('/checkout/select-plan', [\App\Http\Controllers\Admin\StudyClubAdminCheckoutController::class, 'savePlan'])->name('admin.studyclub.checkout.savePlan');
         Route::post('/checkout/process-payment', [\App\Http\Controllers\Admin\StudyClubAdminCheckoutController::class, 'processPayment'])->name('admin.studyclub.checkout.processPayment');
+
+        // Gerenciamento de Admins (novo)
+        Route::get('/admins', [\App\Http\Controllers\Admin\StudyClubAdminController::class, 'admins'])->name('admin.studyclub.admins');
+        Route::post('/admins', [\App\Http\Controllers\Admin\StudyClubAdminController::class, 'storeAdmin'])->name('admin.studyclub.admins.store');
+        Route::delete('/admins/{id}', [\App\Http\Controllers\Admin\StudyClubAdminController::class, 'destroyAdmin'])->name('admin.studyclub.admins.destroy');
     });
 
     //Rota de cadastro
@@ -412,5 +418,8 @@ Route::group(['middleware' => 'Language'], function () {
     Route::get('/studyclub', [\App\Http\Controllers\StudyClubController::class, 'index'])->name('studyclub.index');
     Route::get('/studyclub/edition/{number}', [\App\Http\Controllers\StudyClubController::class, 'edition'])->name('studyclub.edition');
     Route::get('/studyclub/{editionNumber}/{itemId}', [\App\Http\Controllers\StudyClubController::class, 'show'])->name('studyclub.show');
+    
+    // Interações (Autenticadas via Sessão DentalGo)
+    Route::post('/studyclub/items/{itemId}/like', [\App\Http\Controllers\StudyClubController::class, 'toggleLike'])->name('studyclub.item.like');
 
 });

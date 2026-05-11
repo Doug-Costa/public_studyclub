@@ -196,6 +196,47 @@ class StudyClubAdminController extends Controller
     }
 
     /**
+     * Atualiza um item (artigo)
+     */
+    public function updateItem(StoreItemRequest $request, int $itemId)
+    {
+        try {
+            $item = $this->repository->findItemById($itemId);
+
+            if (!$item) {
+                abort(404, 'Artigo não encontrado');
+            }
+
+            $editionId = $item->edition_id;
+            $data = $request->validated();
+            
+            // Processa upload de nova imagem
+            if ($request->hasFile('image')) {
+                // Deleta imagem antiga
+                if ($item->image_path && Storage::disk('public')->exists($item->image_path)) {
+                    Storage::disk('public')->delete($item->image_path);
+                }
+                $data['image_path'] = $this->uploadImage($request->file('image'));
+            }
+
+            $item->fill($data);
+            $this->repository->saveItem($item);
+
+            Log::info('Study Club Item atualizado', ['item_id' => $itemId, 'user' => auth()->id()]);
+
+            return redirect()
+                ->route('admin.studyclub.edit', $editionId)
+                ->with('success', 'Artigo atualizado com sucesso!');
+        } catch (\Exception $e) {
+            Log::error('Erro ao atualizar Study Club Item', ['item_id' => $itemId, 'error' => $e->getMessage()]);
+
+            return back()
+                ->with('error', 'Erro ao atualizar artigo. Tente novamente.')
+                ->withInput();
+        }
+    }
+
+    /**
      * Remove item
      */
     public function destroyItem(int $itemId)

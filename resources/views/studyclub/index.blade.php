@@ -65,7 +65,6 @@
                                             <div class="d-flex justify-content-between align-items-center">
                                                 <div class="text-muted small">
                                                     <span class="me-2"><i class="bi bi-heart-fill text-danger"></i> {{ $item->likes }}</span>
-                                                    <span><i class="bi bi-chat-fill text-primary"></i> {{ $item->comments }}</span>
                                                 </div>
                                                 <span class="btn btn-outline-primary btn-sm rounded-pill px-3">Ver Artigo</span>
                                             </div>
@@ -122,20 +121,8 @@
             {{-- Coluna Direita: Sidebar --}}
             <div class="col-lg-4">
                 <div class="sticky-top" style="top: 100px;">
-                    {{-- Curadores --}}
-                    <div class="card border-0 rounded-4 shadow-sm mb-4 bg-white">
-                        <div class="card-body p-4">
-                            <h5 class="fw-bold mb-3 small text-uppercase tracking-wider">Nesta Seleção</h5>
-                            <div class="d-flex gap-1 mb-3">
-                                <img src="https://i.pravatar.cc/150?u=1" class="rounded-circle border border-2 border-white shadow-sm" style="width: 38px; height: 38px;" alt="Curador">
-                                <img src="https://i.pravatar.cc/150?u=2" class="rounded-circle border border-2 border-white shadow-sm" style="width: 38px; height: 38px; margin-left: -12px;" alt="Curador">
-                                <img src="https://i.pravatar.cc/150?u=3" class="rounded-circle border border-2 border-white shadow-sm" style="width: 38px; height: 38px; margin-left: -12px;" alt="Curador">
-                                <img src="https://i.pravatar.cc/150?u=4" class="rounded-circle border border-2 border-white shadow-sm" style="width: 38px; height: 38px; margin-left: -12px;" alt="Curador">
-                            </div>
-                            <p class="text-muted x-small mb-4">Jornalista e dentistas líderes selecionam artigos relevantes.</p>
-                            <button class="btn btn-danger w-100 rounded-pill fw-bold btn-sm py-2">Conheça os Curadores</button>
-                        </div>
-                    </div>
+                    {{-- Sidebar Categorias --}}
+                    @include('studyclub.partials._sidebar_categories')
 
                     {{-- Próximas Playlists (Simulado ou Real) --}}
                     <div class="card border-0 rounded-4 shadow-sm mb-4 bg-white">
@@ -150,38 +137,6 @@
                                     <small class="text-muted d-block">04/06/2026</small>
                                     <span class="fw-bold small">Study Club #11</span>
                                 </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    {{-- Ciclo Semanal --}}
-                    <div class="card border-0 rounded-4 shadow-sm mb-4 bg-white">
-                        <div class="card-body p-4 text-center">
-                            <h5 class="fw-bold mb-3 small text-uppercase tracking-wider">Ciclo semanal</h5>
-                            <div class="progress mb-2" style="height: 6px;">
-                                <div class="progress-bar bg-primary" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-                            </div>
-                            <span class="x-small text-muted">0%</span>
-                        </div>
-                    </div>
-
-                    {{-- Categorias Populares --}}
-                    <div class="card border-0 rounded-4 shadow-sm bg-white">
-                        <div class="card-body p-4">
-                            <h5 class="fw-bold mb-3 small text-uppercase tracking-wider">Categorias Populares</h5>
-                            <div class="d-flex flex-column gap-2">
-                                @php
-                                    $popCategories = \App\Models\StudyClubItem::select('category', \DB::raw('count(*) as total'))->groupBy('category')->orderBy('total', 'desc')->take(5)->get();
-                                @endphp
-                                @foreach($popCategories as $cat)
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <span class="small text-dark">{{ ucfirst($cat->category) }}</span>
-                                        <div class="d-flex align-items-center gap-2">
-                                            <span class="text-muted x-small">{{ rand(50, 150) }}</span>
-                                            <span class="badge bg-light text-muted rounded-pill x-small">{{ $cat->total }}</span>
-                                        </div>
-                                    </div>
-                                @endforeach
                             </div>
                         </div>
                     </div>

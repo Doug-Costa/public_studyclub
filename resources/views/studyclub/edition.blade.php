@@ -88,7 +88,6 @@
                                     <div class="d-flex justify-content-between align-items-center">
                                         <div class="text-muted small">
                                             <span class="me-3"><i class="bi bi-heart-fill text-danger me-1"></i>{{ $item->likes }}</span>
-                                            <span><i class="bi bi-chat-fill text-primary me-1"></i>{{ $item->comments }}</span>
                                         </div>
                                         <a href="{{ route('studyclub.show', [$edition->number, $item->id]) }}" class="btn btn-danger rounded-pill px-4 fw-bold">
                                             Ler Resenha <i class="bi bi-arrow-right ms-1"></i>
@@ -110,23 +109,8 @@
         {{-- Sidebar Premium --}}
         <div class="col-lg-4 mt-5 mt-lg-0">
             <div class="sticky-top" style="top: 100px;">
-                {{-- Ciclo Semanal --}}
-                <div class="card border-0 shadow-sm rounded-4 mb-4">
-                    <div class="card-body p-4 text-center">
-                        <h5 class="fw-bold mb-4">Ciclo semanal:</h5>
-                        <div class="position-relative d-inline-block mb-4">
-                            <svg width="120" height="120" viewBox="0 0 120 120">
-                                <circle cx="60" cy="60" r="54" fill="none" stroke="#f3f4f6" stroke-width="8" />
-                                <circle cx="60" cy="60" r="54" fill="none" stroke="#e5e7eb" stroke-width="8" stroke-dasharray="339.29" stroke-dashoffset="339.29" style="transition: stroke-dashoffset 1s ease-in-out; stroke: #d1d5db;" />
-                                <circle cx="60" cy="60" r="54" fill="none" stroke="#7c3aed" stroke-width="8" stroke-dasharray="339.29" stroke-dashoffset="339.29" />
-                            </svg>
-                            <div class="position-absolute top-50 start-50 translate-middle">
-                                <span class="h2 fw-bold mb-0">0%</span>
-                            </div>
-                        </div>
-                        <p class="text-muted small">Comece a leitura</p>
-                    </div>
-                </div>
+                {{-- Sidebar Categorias --}}
+                @include('studyclub.partials._sidebar_categories')
 
                 {{-- Próximas Playlists --}}
                 <div class="card border-0 shadow-sm rounded-4">
@@ -184,5 +168,6 @@
     .object-fit-cover {
         object-fit: cover;
     }
+    .x-small { font-size: 0.75rem; }
 </style>
 @endpush

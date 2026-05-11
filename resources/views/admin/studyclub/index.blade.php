@@ -26,8 +26,11 @@
             <p class="text-muted mb-0">Gerencie as edições e artigos do Study Club</p>
         </div>
         <div class="d-flex gap-2">
+            <a href="{{ route('admin.studyclub.admins') }}" class="btn btn-outline-secondary btn-lg">
+                <i class="bi bi-people me-2"></i>Admins
+            </a>
             <a href="{{ route('admin.studyclub.checkout') }}" class="btn btn-outline-secondary btn-lg">
-                <i class="bi bi-cart-check me-2"></i>Testar Checkout
+                <i class="bi bi-cart-check me-2"></i>Checkout
             </a>
             <a href="{{ route('admin.studyclub.create') }}" class="btn btn-primary btn-lg">
                 <i class="bi bi-plus-lg me-2"></i>Nova Edição

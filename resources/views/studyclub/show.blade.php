@@ -16,7 +16,7 @@
             </nav>
 
             <div class="row align-items-center">
-                <div class="col-lg-9">
+                <div class="col-12">
                     <span class="badge bg-primary px-3 py-2 mb-3 text-uppercase fw-bold">{{ $item->formatted_category }}</span>
                     <h1 class="display-5 fw-bold text-dark mb-4" style="line-height: 1.2;">{{ $item->title }}</h1>
                     
@@ -35,16 +35,6 @@
                             <i class="bi bi-journal-bookmark me-2"></i>
                             <span class="small">Fonte: {{ $item->type_label ?? 'Artigo' }}</span>
                         </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 text-lg-end mt-4 mt-lg-0">
-                    <div class="d-flex justify-content-lg-end gap-2">
-                        <a href="#" class="btn btn-outline-primary rounded-circle p-2" title="Compartilhar no LinkedIn">
-                            <i class="bi bi-linkedin fs-5"></i>
-                        </a>
-                        <a href="#" class="btn btn-outline-success rounded-circle p-2" title="Compartilhar no WhatsApp">
-                            <i class="bi bi-whatsapp fs-5"></i>
-                        </a>
                     </div>
                 </div>
             </div>
@@ -109,27 +99,10 @@
                     </div>
                 </div>
 
-                {{-- Botão de Download PDF --}}
-                <div class="d-flex align-items-center justify-content-between p-4 bg-white rounded-4 shadow-sm">
-                    <div class="d-flex align-items-center">
-                        <div class="bg-success bg-opacity-10 p-2 rounded-circle me-3">
-                            <i class="bi bi-check-lg text-success"></i>
-                        </div>
-                        <span class="fw-semibold text-dark">Você leu a resenha completa</span>
-                    </div>
-                    <a href="{{ $item->external_url }}" target="_blank" class="btn btn-danger btn-lg rounded-pill px-4 fw-bold">
-                        <i class="bi bi-download me-2"></i> Baixar o Artigo Completo (PDF)
-                    </a>
-                </div>
-
                 {{-- Artigos Relacionados --}}
                 <div class="mt-5 pt-5 border-top">
                     <div class="d-flex justify-content-between align-items-center mb-4">
                         <h3 class="fw-bold">Outros Artigos Relacionados</h3>
-                        <div class="d-flex gap-2">
-                            <button class="btn btn-light rounded-circle shadow-sm" style="width: 40px; height: 40px;"><i class="bi bi-chevron-left"></i></button>
-                            <button class="btn btn-light rounded-circle shadow-sm" style="width: 40px; height: 40px;"><i class="bi bi-chevron-right"></i></button>
-                        </div>
                     </div>
                     <div class="row g-4">
                         @foreach($relatedArticles as $related)
@@ -145,7 +118,6 @@
                                             <div class="d-flex justify-content-between align-items-center">
                                                 <div class="text-muted small">
                                                     <span class="me-2"><i class="bi bi-heart-fill text-danger"></i> {{ $related->likes }}</span>
-                                                    <span><i class="bi bi-chat-fill text-primary"></i> {{ $related->comments }}</span>
                                                 </div>
                                                 <span class="btn btn-outline-primary btn-sm rounded-pill px-3">Ver Artigo</span>
                                             </div>
@@ -161,44 +133,11 @@
             {{-- Sidebar --}}
             <div class="col-lg-4">
                 <div class="sticky-top" style="top: 100px;">
-                    {{-- Curadores --}}
-                    <div class="card border-0 rounded-4 shadow-sm mb-4 bg-white">
-                        <div class="card-body p-4">
-                            <h5 class="fw-bold mb-4">Nesta Seleção</h5>
-                            <div class="d-flex gap-2 mb-3">
-                                <img src="https://i.pravatar.cc/150?u=1" class="rounded-circle border border-2 border-white shadow-sm" style="width: 45px; height: 45px;" alt="Curador">
-                                <img src="https://i.pravatar.cc/150?u=2" class="rounded-circle border border-2 border-white shadow-sm" style="width: 45px; height: 45px; margin-left: -15px;" alt="Curador">
-                                <img src="https://i.pravatar.cc/150?u=3" class="rounded-circle border border-2 border-white shadow-sm" style="width: 45px; height: 45px; margin-left: -15px;" alt="Curador">
-                                <img src="https://i.pravatar.cc/150?u=4" class="rounded-circle border border-2 border-white shadow-sm" style="width: 45px; height: 45px; margin-left: -15px;" alt="Curador">
-                            </div>
-                            <p class="text-muted small mb-4">Jornalista e dentistas líderes selecionam artigos relevantes.</p>
-                            <button class="btn btn-danger w-100 rounded-pill fw-bold py-2">Conheça os Curadores</button>
-                        </div>
-                    </div>
-
-                    {{-- Categorias Populares --}}
-                    <div class="card border-0 rounded-4 shadow-sm mb-4 bg-white">
-                        <div class="card-body p-4">
-                            <h5 class="fw-bold mb-4">Categorias Populares</h5>
-                            @php
-                                $allCategories = \App\Models\StudyClubItem::select('category', \DB::raw('count(*) as total'))->groupBy('category')->orderBy('total', 'desc')->take(5)->get();
-                            @endphp
-                            <div class="list-group list-group-flush border-0">
-                                @foreach($allCategories as $cat)
-                                    <div class="list-group-item border-0 px-0 d-flex justify-content-between align-items-center py-2">
-                                        <span class="text-dark">{{ ucfirst($cat->category) }}</span>
-                                        <div>
-                                            <span class="text-muted small me-2">{{ rand(50, 150) }}</span> {{-- Simulação de visualizações --}}
-                                            <span class="badge bg-primary bg-opacity-10 text-primary rounded-pill">{{ $cat->total }}</span>
-                                        </div>
-                                    </div>
-                                @endforeach
-                            </div>
-                        </div>
-                    </div>
+                    {{-- Sidebar Categorias --}}
+                    @include('studyclub.partials._sidebar_categories')
 
                     {{-- Newsletter --}}
-                    <div class="card border-0 rounded-4 shadow-sm bg-white overflow-hidden">
+                    <div class="card border-0 rounded-4 shadow-sm bg-white overflow-hidden mb-4">
                         <div class="card-body p-4">
                             <h5 class="fw-bold mb-3">StudyClub Newsletter</h5>
                             <p class="text-muted small mb-4">Receba os artigos selecionados toda quarta-feira.</p>
@@ -210,12 +149,87 @@
                             </form>
                         </div>
                     </div>
+
+                    {{-- Ações e Redes Sociais (NOVO CARD) --}}
+                    <div class="card border-0 rounded-4 shadow-sm bg-white mb-4">
+                        <div class="card-body p-4">
+                            <h5 class="fw-bold mb-4 small text-uppercase tracking-wider">Interação & Acesso</h5>
+                            
+                            {{-- Like --}}
+                            <div class="mb-4">
+                                <div class="d-flex align-items-center justify-content-between mb-2">
+                                    <span class="small fw-medium text-dark">Curtir Artigo</span>
+                                    <span class="x-small text-muted" id="likes-text">Likes</span>
+                                </div>
+                                <button class="btn btn-{{ $item->is_liked ? 'danger' : 'outline-danger' }} w-100 rounded-pill py-2 fw-bold d-flex align-items-center justify-content-center" 
+                                        id="btn-like" data-id="{{ $item->id }}" onclick="toggleLike()">
+                                    <i class="bi bi-heart{{ $item->is_liked ? '-fill' : '' }} me-2"></i>
+                                    <span id="likes-count">{{ $item->likes }}</span>
+                                </button>
+                            </div>
+
+                            {{-- Artigo Original --}}
+                            <div class="mb-4 pt-4 border-top">
+                                <a href="{{ $item->external_url }}" target="_blank" class="btn btn-primary w-100 rounded-pill py-2 fw-bold shadow-sm">
+                                    <i class="bi bi-link-45deg me-1"></i> Artigo Original
+                                </a>
+                            </div>
+
+                            {{-- Redes Sociais --}}
+                            <div class="pt-4 border-top">
+                                <p class="small fw-medium text-dark mb-3 text-center">Compartilhar Artigo</p>
+                                <div class="d-flex justify-content-center gap-3">
+                                    <a href="https://www.linkedin.com/sharing/share-offsite/?url={{ urlencode(request()->fullUrl()) }}" target="_blank" 
+                                       class="btn btn-outline-primary rounded-circle d-flex align-items-center justify-content-center p-0" style="width: 40px; height: 40px;">
+                                        <i class="bi bi-linkedin fs-5"></i>
+                                    </a>
+                                    <a href="https://api.whatsapp.com/send?text={{ urlencode($item->title . ' - ' . request()->fullUrl()) }}" target="_blank" 
+                                       class="btn btn-outline-success rounded-circle d-flex align-items-center justify-content-center p-0" style="width: 40px; height: 40px;">
+                                        <i class="bi bi-whatsapp fs-5"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
 @endsection
+
+@push('scripts')
+<script>
+    function toggleLike() {
+        const btn = document.getElementById('btn-like');
+        const itemId = btn.getAttribute('data-id');
+        
+        fetch(`/studyclub/items/${itemId}/like`, {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'Accept': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                document.getElementById('likes-count').innerText = data.likesCount;
+                const icon = btn.querySelector('i');
+                if (data.liked) {
+                    btn.classList.replace('btn-outline-danger', 'btn-danger');
+                    icon.classList.replace('bi-heart', 'bi-heart-fill');
+                } else {
+                    btn.classList.replace('btn-danger', 'btn-outline-danger');
+                    icon.classList.replace('bi-heart-fill', 'bi-heart');
+                }
+            } else if (data.status === 401 || data.message === 'Unauthenticated') {
+                alert('Faça login para curtir o artigo!');
+            }
+        });
+    }
+</script>
+@endpush
 
 @push('estilos')
 <style>
@@ -224,6 +238,8 @@
     .text-gray-600 { color: #4b5563; }
     .leading-relaxed { line-height: 1.625; }
     .object-fit-cover { object-fit: cover; }
+    .x-small { font-size: 0.75rem; }
+    .tracking-wider { letter-spacing: 0.05em; }
     
     .premium-card-hover {
         transition: all 0.3s ease;

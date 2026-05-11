@@ -25,7 +25,7 @@ class StoreItemRequest extends FormRequest
             'implicacoes' => ['required', 'string'],
             'external_url' => ['required', 'url', 'max:500'],
             'icon' => ['required', 'string', 'max:50'],
-            'image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,webp', 'max:2048'],
+            'image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,webp', 'max:102400'],
             'likes' => ['integer', 'min:0'],
             'comments' => ['integer', 'min:0'],
         ];
@@ -48,7 +48,7 @@ class StoreItemRequest extends FormRequest
             'icon.required' => 'O ícone é obrigatório.',
             'image.image' => 'O arquivo deve ser uma imagem.',
             'image.mimes' => 'A imagem deve ser JPG, PNG, GIF ou WebP.',
-            'image.max' => 'A imagem não pode ter mais que 2MB.',
+            'image.max' => 'A imagem não pode ter mais que 100MB.',
         ];
     }
 }

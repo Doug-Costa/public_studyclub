@@ -31,6 +31,7 @@ class StudyClubItem extends Model
         'likes',
         'comments',
         'icon',
+        'comments_enabled',
     ];
 
     protected $casts = [
@@ -57,6 +58,21 @@ class StudyClubItem extends Model
     public function edition(): BelongsTo
     {
         return $this->belongsTo(StudyClubEdition::class, 'edition_id');
+    }
+
+    public function comments()
+    {
+        return $this->hasMany(StudyClubComment::class, 'item_id');
+    }
+
+    public function approvedComments()
+    {
+        return $this->hasMany(StudyClubComment::class, 'item_id')->where('status', 'approved');
+    }
+
+    public function likesCount()
+    {
+        return $this->hasMany(StudyClubLike::class, 'item_id');
     }
 
     /**

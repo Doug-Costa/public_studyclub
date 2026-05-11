@@ -142,6 +142,11 @@
                                             </span>
                                         </td>
                                         <td class="text-end">
+                                            <button class="btn btn-sm btn-outline-primary me-1 btn-edit-item" 
+                                                    data-item="{{ json_encode($item) }}"
+                                                    data-action="{{ route('admin.studyclub.items.update', $item->id) }}">
+                                                <i class="bi bi-pencil"></i>
+                                            </button>
                                             <form action="{{ route('admin.studyclub.items.destroy', $item->id) }}" 
                                                   method="POST" 
                                                   class="d-inline"
@@ -171,68 +176,26 @@
     </div>
 </div>
 
-{{-- Fix para Modal no facelift2 --}}
+{{-- Estilos para Modais no facelift2 --}}
 <style>
-    /* Forçar modal a quebrar stacking context */
-    #addItemModal {
+    .modal-fixed {
         position: fixed !important;
         z-index: 2147483647 !important;
         transform: translateZ(0) !important;
         will-change: transform, opacity !important;
-        padding-top: 80px !important; /* Espaço para o header do Facelift2 */
+        padding-top: 80px !important;
     }
-    
-    /* Container do modal deve ter z-index alto */
-    #addItemModal .modal-dialog {
+    .modal-fixed .modal-dialog {
         z-index: 2147483647 !important;
         position: relative !important;
         margin-top: 20px !important;
     }
-    
-    /* Conteúdo do modal */
-    #addItemModal .modal-content {
+    .modal-fixed .modal-content {
         z-index: 2147483647 !important;
         box-shadow: 0 10px 40px rgba(0,0,0,0.8) !important;
         border: 3px solid #fff !important;
         background: white !important;
-        position: relative !important;
     }
-    
-    /* Header com z-index mais alto - ACIMA DE TUDO */
-    #addItemModal .modal-header {
-        z-index: 2147483648 !important;
-        position: relative !important;
-        background: linear-gradient(135deg, #0056b3 0%, #d21d5b 100%) !important;
-        transform: translateZ(0) !important; /* Quebra stacking context */
-    }
-    
-    /* Forçar elementos do modal ficarem acima do sidebar-backdrop */
-    #addItemModal .modal-header,
-    #addItemModal .modal-body,
-    #addItemModal .modal-footer,
-    #addItemModal .modal-content {
-        position: relative !important;
-        z-index: 2147483647 !important;
-    }
-    
-    /* Botão de fechar - garantir que está clicável */
-    #addItemModal .btn-close {
-        z-index: 2147483649 !important;
-        position: relative !important;
-        opacity: 1 !important;
-        filter: none !important;
-    }
-    
-    /* Desativar elementos do facelift2 quando modal aberto */
-    body.modal-open .sidebar,
-    body.modal-open .topbar,
-    body.modal-open .sidebar-left,
-    body.modal-open aside,
-    body.modal-open header {
-        pointer-events: none !important;
-    }
-    
-    /* Backdrop customizado */
     #customBackdrop {
         position: fixed !important;
         top: 0 !important;
@@ -242,18 +205,12 @@
         background-color: rgba(0,0,0,0.6) !important;
         z-index: 2147483646 !important;
         display: none;
-        pointer-events: none !important;
     }
-    
     body.modal-open #customBackdrop {
         display: block !important;
     }
-    
-    /* Esconder backdrop do Bootstrap */
-    body .modal-backdrop,
-    .modal-backdrop.show {
+    body .modal-backdrop {
         display: none !important;
-        z-index: -1 !important;
     }
 </style>
 
@@ -261,7 +218,7 @@
 <div id="customBackdrop"></div>
 
 {{-- Modal: Adicionar Artigo --}}
-<div class="modal fade" id="addItemModal" tabindex="-1" aria-labelledby="addItemModalLabel" aria-hidden="true" data-bs-backdrop="static">
+<div class="modal fade modal-fixed" id="addItemModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header bg-primary text-white">
@@ -271,69 +228,7 @@
             <form action="{{ route('admin.studyclub.items.store', $edition->id) }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="modal-body">
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label">Categoria *</label>
-                            <input type="text" class="form-control" name="category" required 
-                                   placeholder="Ex: ORTODONTIA">
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label">Tipo *</label>
-                            <select class="form-select" name="type" required>
-                                <option value="article">Artigo</option>
-                                <option value="interview">Entrevista</option>
-                                <option value="special">Especial</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">Rótulo do Tipo *</label>
-                        <input type="text" class="form-control" name="type_label" required 
-                               placeholder="Ex: Artigo Original, Entrevista...">
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">Autor(es) *</label>
-                        <input type="text" class="form-control" name="author" required>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">Título *</label>
-                        <input type="text" class="form-control" name="title" required>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">Resumo *</label>
-                        <textarea class="form-control" name="resumo" rows="3" required></textarea>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">Achados *</label>
-                        <textarea class="form-control" name="achados" rows="2" required></textarea>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">Implicações *</label>
-                        <textarea class="form-control" name="implicacoes" rows="2" required></textarea>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">URL Externa (DentalGO) *</label>
-                        <input type="url" class="form-control" name="external_url" required
-                               placeholder="https://dentalgo.com.br/...">
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label">Ícone (Bootstrap Icons)</label>
-                            <input type="text" class="form-control" name="icon" value="bi-journal-text">
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label">Imagem</label>
-                            <input type="file" class="form-control" name="image" accept="image/*">
-                        </div>
-                    </div>
+                    @include('admin.studyclub.items._form_fields')
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
@@ -346,51 +241,81 @@
     </div>
 </div>
 
-{{-- JavaScript para garantir modal funcione --}}
+{{-- Modal: Editar Artigo --}}
+<div class="modal fade modal-fixed" id="editItemModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-info text-white">
+                <h5 class="modal-title"><i class="bi bi-pencil-square me-2"></i>Editar Artigo</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <form id="editItemForm" action="" method="POST" enctype="multipart/form-data">
+                @csrf
+                @method('PUT')
+                <div class="modal-body">
+                    @include('admin.studyclub.items._form_fields', ['isEdit' => true])
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-info text-white">
+                        <i class="bi bi-check-lg me-2"></i>Salvar Alterações
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    var modal = document.getElementById('addItemModal');
-    var customBackdrop = document.getElementById('customBackdrop');
+    const customBackdrop = document.getElementById('customBackdrop');
     
-    if (modal) {
-        // Forçar z-index quando o modal abrir
+    // Função para configurar z-index e backdrops dos modais
+    function setupModal(modalId) {
+        const modal = document.getElementById(modalId);
+        if (!modal) return;
+        
         modal.addEventListener('shown.bs.modal', function() {
-            // Mostrar custom backdrop
-            if (customBackdrop) {
-                customBackdrop.style.display = 'block';
-            }
-            
-            // Garantir que o modal está acima de tudo
+            customBackdrop.style.display = 'block';
             modal.style.zIndex = '2147483647';
-            modal.style.position = 'fixed';
-            
-            // Esconder backdrop do Bootstrap se existir
-            var bootstrapBackdrops = document.querySelectorAll('.modal-backdrop');
-            bootstrapBackdrops.forEach(function(backdrop) {
-                backdrop.style.display = 'none';
-            });
-            
-            // Ajustar elementos internos do modal
-            var dialog = modal.querySelector('.modal-dialog');
-            if (dialog) {
-                dialog.style.zIndex = '2147483647';
-                dialog.style.position = 'relative';
-            }
-            var content = modal.querySelector('.modal-content');
-            if (content) {
-                content.style.zIndex = '2147483647';
-                content.style.position = 'relative';
+            document.querySelectorAll('.modal-backdrop').forEach(b => b.style.display = 'none');
         });
         
-        // Limpar quando fechar
         modal.addEventListener('hidden.bs.modal', function() {
-            modal.style.zIndex = '';
-            if (customBackdrop) {
-                customBackdrop.style.display = 'none';
-            }
+            customBackdrop.style.display = 'none';
         });
     }
+
+    setupModal('addItemModal');
+    setupModal('editItemModal');
+
+    // Lógica para abrir modal de edição e preencher campos
+    document.querySelectorAll('.btn-edit-item').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const item = JSON.parse(this.getAttribute('data-item'));
+            const action = this.getAttribute('data-action');
+            const form = document.getElementById('editItemForm');
+            
+            form.action = action;
+            
+            // Preencher campos
+            form.querySelector('[name="category"]').value = item.category;
+            form.querySelector('[name="type"]').value = item.type;
+            form.querySelector('[name="type_label"]').value = item.type_label;
+            form.querySelector('[name="author"]').value = item.author;
+            form.querySelector('[name="title"]').value = item.title;
+            form.querySelector('[name="resumo"]').value = item.resumo;
+            form.querySelector('[name="achados"]').value = item.achados;
+            form.querySelector('[name="implicacoes"]').value = item.implicacoes;
+            form.querySelector('[name="external_url"]').value = item.external_url;
+            form.querySelector('[name="icon"]').value = item.icon;
+            form.querySelector('[name="likes"]').value = item.likes || 0;
+            
+            // Abrir modal
+            const editModal = new bootstrap.Modal(document.getElementById('editItemModal'));
+            editModal.show();
+        });
+    });
 });
 </script>
-
 @endsection
